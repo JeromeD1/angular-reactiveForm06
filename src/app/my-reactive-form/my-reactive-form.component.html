@@ -1,0 +1,59 @@
+
+<h1>Practice quete reactive form 06</h1>
+
+<form [formGroup]="orderForm" #myForm (ngSubmit)="orderForm.valid && onSubmit()">
+    <div>
+        <label for="title">Title</label>
+        <input type="text" name="title" formControlName="title">
+    </div>
+    <div *ngIf="orderForm.controls.title.errors" >
+        <span *ngIf="orderForm.controls.title.errors?.['required']" >Le champ titre est requis</span>
+    </div>
+    <div>
+        <label for="quantity">Quantity</label>
+        <input type="number" name="quantity" formControlName="quantity">
+    </div>
+    <div *ngIf="orderForm.controls.quantity.errors" >
+        <span *ngIf="orderForm.controls.quantity.errors?.['required']" >Le champ quantity est requis</span>
+        <span *ngIf="orderForm.controls.quantity.errors?.['min']" >Quantité min = 1</span>
+        <span *ngIf="orderForm.controls.quantity.errors?.['max']" >Quantité max = 5</span>
+    </div>
+    <div>
+        <label for="dateOrder">Date order</label>
+        <input type="date" name="dateOrder" formControlName="dateOrder">
+    </div>
+    <div *ngIf="orderForm.controls.title.errors" >
+        <span *ngIf="orderForm.controls.dateOrder.errors?.['required']" >Le champ date est requis</span>
+    </div>
+    <div>
+        <label for="email">Contact</label>
+        <input type="email" name="email" formControlName="email">
+    </div>
+    <div *ngIf="orderForm.controls.title.errors" >
+        <span *ngIf="orderForm.controls.email.errors?.['required']" >Le champ email est requis</span>
+        <span *ngIf="orderForm.controls.email.errors?.['email']" >Veuillez saisir un email valide</span>
+
+    </div>
+
+    <ng-container formArrayName="payments">
+        <div [formGroupName]="i" *ngFor="let payment of payments.controls; let i = index">
+            <div>
+                <label for="date - {{i}}">Date :</label>
+                <input name="date - {{i}}" type="date" formControlName="date">
+                <span *ngIf="payment.get('date')?.errors?.['required']" >Le champ est requis</span>
+                <span *ngIf="payment.get('date')?.errors?.['min'] != undefined" >La date doit être ultérieure à aujourd'hui</span>
+            </div>
+            <div>
+                <label for="amount - {{i}}">Amount :</label>
+                <input name="amount - {{i}}" type="number" formControlName="amount">
+                <span *ngIf="payment.get('amount')?.errors?.['required']" >Le champ montant est requis</span>
+            </div>
+        </div>
+    </ng-container>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+
+<button (click)="addPayment()">Ajouter date paiement</button>
